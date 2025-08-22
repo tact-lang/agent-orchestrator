@@ -176,6 +176,15 @@ Some plugins (e.g., Claude Code) validate model aliases via `models.yaml`. If an
 - Plugins default to `pitaya-agents:latest`; override per run with `--docker-image <repo/name:tag>`
 - Full isolation per instance: dedicated container, workspace mount, and session volume
 
+## Custom Strategies
+
+- Use built-ins (e.g., `simple`, `best-of-n`, `iterative`) or point to a local file:
+  - Class-based: `pitaya "task" --strategy ./examples/custom_strategy.py -S model=sonnet`
+  - Explicit class: `pitaya "task" --strategy ./examples/custom_strategy.py:MyCustomStrategy`
+- Define a class subclassing `Strategy` (see `src/orchestration/strategies/base.py`).
+  - Minimal boilerplate: set `NAME = "your-name"`, implement `execute(self, prompt, base_branch, ctx)`.
+  - Use `self.logger` for logging, no logging imports needed.
+
 ## Logs & Artifacts
 
 - Logs: `logs/<run_id>/events.jsonl` and structured component logs
